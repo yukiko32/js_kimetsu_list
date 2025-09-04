@@ -13,6 +13,9 @@ const nodeOps = {
   qs(selector, scope) {
     return (scope || document).querySelector(selector);
   },
+  qsAll(selector, scope) {
+    return (scope || document).querySelectorAll(selector);
+  },
   create(type) {
     return document.createElement(type);
   },
@@ -68,23 +71,38 @@ function loaded() {
   load.classList.add('loaded');
 }
 
+function getTimeLeft(start, time) {
+  const elapsed = Date.now() - start;
+  return Math.max(0, time - elapsed);
+}
+
+function displayErrorMsg(msg) {
+  const error = nodeOps.qs('.error-msg');
+  nodeOps.html(error, msg);
+}
+
 async function drawList(category) {
   loading();
+  const start = Date.now();
   try {
     const json = await fetchCharacters(url[category]);
+    const delay = getTimeLeft(start, 600);
     setTimeout(() => {
       nodeOps.html(listContainer, "");
       assemblyEl(json);
       loaded();
-    }, 800);
-  } catch (e) {
-    console.error(e);
-    loaded();
+    }, delay);
+  } catch {
+    const delay = getTimeLeft(start, 600);
+    setTimeout(() => {
+      displayErrorMsg('データを取得できませんでした');
+      loaded();
+    }, delay);
   }
 }
 
 
-const buttons = document.getElementsByName('choice');
+const buttons = nodeOps.qsAll('[name="choice"]');
 for (const button of buttons) {
   button.addEventListener("change", (event) => {
     const category = event.target.value;

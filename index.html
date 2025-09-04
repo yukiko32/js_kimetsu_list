@@ -11,13 +11,12 @@
 
   <!-- ローディング画面 -->
   <div class="spinner loaded"></div>
-  <div  class="load loaded"></div>
-
+  <div class="load loaded"></div>
 
   <!-- 表示画面 -->
   <header>
     <h1>鬼滅の刃 キャラクター一覧</h1>
-    <div class="container buttons">
+    <div class="buttons">
       <label class="button"><input type="radio" name="choice" value="all" checked>全キャラクター</label>
       <label class="button"><input type="radio" name="choice" value="kisatsutai">鬼殺隊</label>
       <label class="button"><input type="radio" name="choice" value="hashira">柱</label>
@@ -25,12 +24,20 @@
     </div>
   </header>
 
-  <!-- キャラクター表示 -->
   <div class="container">
     <ul id="js-list" class="list-container">
       <!-- ここにキャラクターを表示 -->
     </ul>
   </div>
+
+  <!-- エラーメッセージを表示 -->
+  <div class="container">
+    <p class="error-msg"></p>
+  </div>
+
+  <footer>
+    2025 JavaScript practice
+  </footer>
 
   <script type="module" src="index.js"></script>
 </body>
