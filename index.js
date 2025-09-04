@@ -32,13 +32,14 @@ async function fetchCharacters(url) {
   return await response.json();
 }
 
-function createEl(parent, type, value) {
+function createEl(parent, type, value, cla) {
   const tag = nodeOps.create(type);
   if (type === 'img') {
     nodeOps.setAttr(tag, 'src', value);
   } else {
     nodeOps.html(tag, value);
   }
+  cla && tag.classList.add(cla);
   nodeOps.append(parent, tag);
 }
 
@@ -47,14 +48,10 @@ const body = nodeOps.qs('body');
 const listContainer = nodeOps.qs('#js-list', body);
 function assemblyEl(json) {
   for (const character of json) {
-
-    const ul = nodeOps.create('ul');
-    createEl(ul, 'img', `${pass}${character.image}`);
-    createEl(ul, 'p', character.name);
-    createEl(ul, 'p', character.category);
-
     const li = nodeOps.create('li');
-    nodeOps.append(li, ul);
+    createEl(li, 'img', `${pass}${character.image}`);
+    createEl(li, 'p', character.name, 'name');
+    createEl(li, 'p', character.category, 'category');
     nodeOps.append(listContainer, li);
   }
 }
@@ -71,10 +68,10 @@ function loaded() {
   load.classList.add('loaded');
 }
 
-async function drawList(url) {
+async function drawList(category) {
   loading();
   try {
-    const json = await fetchCharacters(url);
+    const json = await fetchCharacters(url[category]);
     setTimeout(() => {
       nodeOps.html(listContainer, "");
       assemblyEl(json);
@@ -90,13 +87,13 @@ async function drawList(url) {
 const buttons = document.getElementsByName('choice');
 for (const button of buttons) {
   button.addEventListener("change", (event) => {
-    const checkValue = event.target.value;
-    drawList(url[checkValue]);
+    const category = event.target.value;
+    drawList(category);
   });
 }
 
 function init(category) {
-  drawList(url[category]);
+  drawList(category);
 }
 
 init('all');

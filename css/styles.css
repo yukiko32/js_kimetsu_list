@@ -60,6 +60,7 @@
   text-indent: -9999em;
   -webkit-animation: load5 1.1s infinite ease;
   animation: load5 1.1s infinite ease;
+  z-index: 10000;
 
   position: absolute;
   top: 50%;
@@ -144,7 +145,7 @@
 
 /* コンテンツ部分 */
 body {
-  background-color: #FF6928;
+  background-color: #FAEBD7;
   width: 100%;
 }
 
@@ -155,9 +156,6 @@ body {
 }
 
 header {
-  position: relative;
-  /* z-index: 10000; */
-  /* loading より上にしたければ */
   margin-bottom: 20px;
 }
 
@@ -181,26 +179,52 @@ input {
   margin-right: 4px;
 }
 
-ul {
-  padding: 0;
-}
-
-img {
-  aspect-ratio: 1/1;
-  max-width: 80%;
-}
-
 .list-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
 
+#js-list {
+  padding: 0;
+  margin-top: 30px;
+}
+
+#js-list li {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+#js-list img,
+#js-list .name {
+  width: 90%;
+}
+
 #js-list img {
+  aspect-ratio: 1/1;
   display: block;
   margin: 0 auto;
+  border: 8px solid #660000;
 }
 
 #js-list p {
   text-align: center;
-  margin: 5px 0;
+}
+
+#js-list .name {
+  margin: 0 auto;
+  padding-top: 2px;
+  padding-bottom: 10px;
+  background-color: #660000;
+  color: #fff;
+}
+
+#js-list .category {
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #000;
+  color: #fff;
+  border: 4px solid #660000;
+  position: absolute;
+  top: -35px;
+  /* left: 0px; */
 }
