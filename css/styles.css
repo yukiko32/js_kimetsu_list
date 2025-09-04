@@ -110,8 +110,14 @@
 }
 
 
-
 /* コンテンツ部分 */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 body {
   background-image: url(../images/background.jpg);
   background-size: 100% auto;
@@ -132,7 +138,7 @@ header {
   background-attachment: fixed;
   background-position: 0px 18px;
   padding: 30px 0;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   box-shadow: 0px 3px 5px #333;
 }
 
@@ -140,17 +146,16 @@ h1 {
   color: #edc04c;
   font-size: 30px;
   text-align: center;
-  margin-top: 0;
-  margin-bottom: 30px;
+  margin: 0;
 }
 
 .buttons {
   background-color: #660000;
   border: 3px double #edc04c;
   width: fit-content;
-  padding: 5px 10px;
+  padding: 10px 15px;
   display: flex;
-  margin: 0 auto;
+  margin: 0 auto 45px auto;
   gap: 45px;
 }
 
@@ -170,6 +175,8 @@ input {
 
 #js-list {
   padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 #js-list li {
@@ -213,16 +220,16 @@ input {
 
 .error-msg {
   text-align: center;
+  margin: 0;
 }
 
 footer {
+  margin-top: auto;
   background-color: #000;
   color: #fff;
   text-align: center;
   font-size: 10px;
   padding: 10px 0;
-  position: absolute;
-  bottom: 0;
   width: 100%;
 }
 
