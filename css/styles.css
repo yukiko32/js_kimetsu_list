@@ -145,8 +145,11 @@
 
 /* コンテンツ部分 */
 body {
-  background-color: #FAEBD7;
+  background-image: url(../images/back-image.jpg);
+  background-size: 100% auto;
+  background-repeat: repeat-y;
   width: 100%;
+  margin: 0;
 }
 
 .container {
