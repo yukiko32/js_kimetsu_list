@@ -239,6 +239,13 @@ footer {
 
 /* スマートフォンサイズ */
 @media screen and (max-width:685px) {
+  .container {
+    width: 95%;
+  }
+
+  .buttons {
+    gap: 35px;
+  }
 
   #js-list .name {
     font-size: 12px;
@@ -248,12 +255,16 @@ footer {
     font-size: 12px;
   }
 
-  .container {
-    width: 95%;
+  .buttons {
+    font-size: 14px;
   }
 }
 
 @media screen and (max-width:480px) {
+  .buttons {
+    gap: 30px;
+  }
+
   #js-list .name {
     font-size: 11px;
   }
