@@ -1,63 +1,5 @@
-/**
- * ベースURL
- * @type {string}
- */
-const pass = `https://ihatov08.github.io`;
-
-
-/**
- * APIのベースURL
- * @type {string}
- */
-const apiPass = `${pass}/kimetsu_api/api`;
-
-
-/**
- * APIの各JSONファイルURL
- * @type {{all: string, kisatsutai: string, hashira: string, oni: string}}
- */
-const url = {
-  all: `${apiPass}/all.json`,
-  kisatsutai: `${apiPass}/kisatsutai.json`,
-  hashira: `${apiPass}/hashira.json`,
-  oni: `${apiPass}/oni.json`
-}
-
-
-/**
- * DOM操作ユーティリティ
- */
-const nodeOps = {
-  qs(selector, scope) {
-    return (scope || document).querySelector(selector);
-  },
-  qsAll(selector, scope) {
-    return (scope || document).querySelectorAll(selector);
-  },
-  create(type) {
-    return document.createElement(type);
-  },
-  append(parent, target) {
-    parent.appendChild(target);
-  },
-  html(target, value) {
-    target.innerHTML = value;
-  },
-  setAttr(parent, type, value) {
-    parent.setAttribute(type, value);
-  }
-}
-
-
-/**
- * APIからJSONを取得
- * @param {string} url 
- * @returns {Promise<any>} JSONデータ
- */
-async function fetchCharacters(url) {
-  const response = await fetch(url);
-  return await response.json();
-}
+import { nodeOps } from './dom.js';
+import { baseUrl, url, fetchCharacters } from './api.js';
 
 
 /**
@@ -67,14 +9,13 @@ async function fetchCharacters(url) {
  * @param {string} value 
  * @param {string} [cla] クラス名
  */
-function createEl(parent, type, value, cla) {
+function appendEl(parent, type, value, cla) {
   const tag = nodeOps.create(type);
   if (type === 'img') {
     nodeOps.setAttr(tag, 'src', value);
   } else {
     nodeOps.html(tag, value);
   }
-  // cla && tag.classList.add(cla);
   if (Array.isArray(cla)) {
     tag.classList.add(...cla);
   } else if (cla) {
@@ -87,37 +28,34 @@ function createEl(parent, type, value, cla) {
 const body = nodeOps.qs('body');
 const listContainer = nodeOps.qs('#js-list', body);
 
-
 /**
- * JSONからリスト要素を組み立てる
+ * JSONからリスト要素を生成する
  * @param {Array<{name:string, category:string, image:string}>} json 
  */
-function assemblyEl(json) {
+function renderList(json) {
   for (const character of json) {
     const li = nodeOps.create('li');
-    createEl(li, 'img', `${pass}${character.image}`);
-    createEl(li, 'p', character.name, 'name');
-    createEl(li, 'p', character.category, 'category');
+    appendEl(li, 'img', `${baseUrl}${character.image}`);
+    appendEl(li, 'p', character.name, 'name');
+    appendEl(li, 'p', character.category, 'category');
     nodeOps.append(listContainer, li);
   }
 }
 
 
-const spinner = nodeOps.qs('.spinner', body);
-const load = nodeOps.qs('.load', body);
-
+const loadingSpinner = nodeOps.qs('.spinner', body);
+const loadingOverlay = nodeOps.qs('.overlay', body);
 
 /** ローディング開始 */
 function loading() {
-  spinner.classList.remove('loaded');
-  load.classList.remove('loaded');
+  loadingSpinner.classList.remove('loaded');
+  loadingOverlay.classList.remove('loaded');
 }
-
 
 /** ローディング終了 */
 function loaded() {
-  spinner.classList.add('loaded');
-  load.classList.add('loaded');
+  loadingSpinner.classList.add('loaded');
+  loadingOverlay.classList.add('loaded');
 }
 
 
@@ -156,7 +94,7 @@ async function drawList(category) {
     // ローディング画面のあとにコンテンツを表示する
     setTimeout(() => {
       nodeOps.html(listContainer, "");
-      assemblyEl(json);
+      renderList(json);
       loaded();
     }, delay);
   } catch {
@@ -169,13 +107,19 @@ async function drawList(category) {
 }
 
 
-// ラジオボタンが押されたら表示を切り替える
-const buttons = nodeOps.qsAll('[name="choice"]');
-for (const button of buttons) {
-  button.addEventListener("change", (event) => {
-    const category = event.target.value;
-    drawList(category);
-  });
+/**
+ * ラジオボタンのイベントを設定する
+ * @returns {void}
+ */
+function setButtons() {
+  // ラジオボタンが押されたら表示を切り替える
+  const buttons = nodeOps.qsAll('[name="choice"]');
+  for (const button of buttons) {
+    button.addEventListener("change", (event) => {
+      const category = event.target.value;
+      drawList(category);
+    });
+  }
 }
 
 
@@ -184,6 +128,7 @@ for (const button of buttons) {
  * @param {'all'|'kisatsutai'|'hashira'|'oni'} category 
  */
 function init(category) {
+  setButtons();
   drawList(category);
 }
 
